@@ -21,18 +21,26 @@ class Auth extends BaseController
         $user = $userModel->getUserByEmail($email);
 
         if ($user && password_verify($password, $user['password'])) {
-            $session->set([
+            $sessionData = [
                 'id' => $user['id'],
                 'username' => $user['username'],
                 'email' => $user['email'],
                 'avatar' => $user['avatar'],
+                'is_admin' => isset($user['is_admin']) ? (int) $user['is_admin'] : 0, // ✅ Ensure is_admin is stored
                 'isLoggedIn' => true
-            ]);
+            ];
+
+            $session->set($sessionData);
+
+            // Debugging: Print session data to check if is_admin is stored
+            log_message('debug', 'Session Data: ' . print_r($session->get(), true));
+
             return redirect()->to('/');
         } else {
             return redirect()->back()->with('error', 'Invalid email or password.');
         }
     }
+
 
     public function register()
     {

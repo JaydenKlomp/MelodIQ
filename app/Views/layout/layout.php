@@ -27,6 +27,12 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
+                <?php if (session()->get('is_admin')): ?>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-warning text-white mx-2" href="<?= base_url('trivia/create') ?>">Create Trivia</a>
+                    </li>
+                <?php endif; ?>
+
                 <li class="nav-item"><a class="nav-link" href="<?= base_url('trivias') ?>">Trivias</a></li>
                 <li class="nav-item"><a class="nav-link" href="<?= base_url('leaderboard') ?>">Leaderboard</a></li>
 
@@ -34,7 +40,7 @@
                 <li class="nav-item dropdown">
                     <?php if(session()->get('isLoggedIn')): ?>
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                            <img src="<?= base_url(session()->get('avatar') ?: 'assets/img/default-avatar.png') ?>" class="rounded-circle border" width="35" height="35">
+                            <img src="<?= base_url(session()->get('avatar') ?: 'uploads/avatars/default.png') ?>" class="rounded-circle border" width="35" height="35">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             <li><a class="dropdown-item" href="<?= base_url('profile') ?>">Profile</a></li>
@@ -43,7 +49,7 @@
                         </ul>
                     <?php else: ?>
                         <a class="nav-link dropdown-toggle" href="#" id="guestDropdown" role="button" data-bs-toggle="dropdown">
-                            <img src="<?= base_url('assets/img/default-avatar.png') ?>" class="rounded-circle border" width="35" height="35">
+                            <img src="<?= base_url('uploads/avatars/default.png') ?>" class="rounded-circle border" width="35" height="35">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="guestDropdown">
                             <li><a class="dropdown-item" href="<?= base_url('login') ?>">Login</a></li>

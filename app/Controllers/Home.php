@@ -10,17 +10,21 @@ class Home extends BaseController
     public function index()
     {
         $userModel = new UserModel();
-        $triviaModel = new TriviaModel();
+        $db = \Config\Database::connect();
 
-        // Get top 5 players
-        $topPlayers = $userModel->orderBy('total_points', 'DESC')->limit(5)->find();
+        $topPlayers = $userModel->orderBy('total_points', 'DESC')->limit(5)->findAll();
 
-        // Get 3 recent trivias
-        $recentTrivias = $triviaModel->orderBy('created_at', 'DESC')->limit(3)->find();
+        $userStats = [];
+        if (session()->get('isLoggedIn')) {
+            $userStats = $userModel->select('trivia_played, total_points, correct_answers')
+                ->where('id', session()->get('id'))
+                ->first();
+        }
 
         return view('home', [
             'topPlayers' => $topPlayers,
-            'recentTrivias' => $recentTrivias
+            'userStats' => $userStats
         ]);
     }
+
 }

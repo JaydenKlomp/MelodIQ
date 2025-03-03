@@ -16,15 +16,15 @@
             <h3>Your Progress</h3>
             <div class="row mt-4">
                 <div class="col-md-4">
-                    <h4><?= esc(session()->get('trivia_played') ?: 0) ?></h4>
+                    <h4><?= esc($userStats['trivia_played'] ?? 0) ?></h4>
                     <p>Trivias Played</p>
                 </div>
                 <div class="col-md-4">
-                    <h4><?= esc(session()->get('total_points') ?: 0) ?></h4>
+                    <h4><?= esc($userStats['total_points'] ?? 0) ?></h4>
                     <p>Total Points</p>
                 </div>
                 <div class="col-md-4">
-                    <h4><?= esc(session()->get('correct_answers') ?: 0) ?></h4>
+                    <h4><?= esc($userStats['correct_answers'] ?? 0) ?></h4>
                     <p>Correct Answers</p>
                 </div>
             </div>
@@ -60,28 +60,28 @@
     </div>
 
     <!-- Leaderboard Section -->
-    <div class="leaderboard mt-5">
-        <h3 class="text-center">🎖 Top Players</h3>
+    <div class="leaderboard mt-5 p-4">
+        <h3 class="text-center">🏆 Top Players</h3>
         <div class="table-responsive">
-            <table class="table table-hover leaderboard-table">
+            <table class="table leaderboard-table">
                 <thead>
                 <tr>
                     <th class="rank-col">Rank</th>
                     <th>Username</th>
-                    <th>Points</th>
+                    <th>🏆 Points</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php foreach ($topPlayers as $index => $player): ?>
-                    <tr>
+                    <tr class="<?= ($index == 0) ? 'gold' : (($index == 1) ? 'silver' : (($index == 2) ? 'bronze' : '')) ?>">
                         <td class="rank-col">#<?= $index + 1 ?></td>
                         <td>
                             <a href="<?= base_url('profile/' . $player['username']) ?>" class="player-link">
-                                <img src="<?= base_url($player['avatar'] ?: 'assets/img/default-avatar.png') ?>" class="avatar-img">
+                                <img src="<?= base_url($player['avatar'] ?: 'uploads/avatars/default.png') ?>" class="avatar-img">
                                 <?= esc($player['username']) ?>
                             </a>
                         </td>
-                        <td><?= esc($player['total_points']) ?></td>
+                        <td><strong><?= esc($player['total_points']) ?></strong></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>

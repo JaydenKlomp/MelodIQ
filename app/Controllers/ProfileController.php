@@ -11,10 +11,11 @@ class ProfileController extends BaseController
     {
         $userModel = new UserModel();
         $followersModel = new FollowersModel();
+        $db = \Config\Database::connect();
 
         // If no username is provided, show the logged-in user's profile
         if (!$username) {
-            $username = session()->get('username'); // Default to logged-in user
+            $username = session()->get('username');
         }
 
         // Fetch user by username instead of ID
@@ -28,14 +29,33 @@ class ProfileController extends BaseController
         $followers = $followersModel->countFollowers($user['id']);
         $following = $followersModel->countFollowing($user['id']);
 
-        // Calculate accuracy percentage
-        $accuracy = ($user['trivia_played'] > 0) ? round(($user['correct_answers'] / ($user['trivia_played'] * 10)) * 100, 2) : 0;
+        // ✅ Correctly calculate answer accuracy
+        $totalAnswers = $user['correct_answers'] + $user['incorrect_answers'];
+        $accuracy = ($totalAnswers > 0) ? round(($user['correct_answers'] / $totalAnswers) * 100, 2) : 0;
+
+        // ✅ Fetch actual leaderboard rank
+        $query = $db->query("
+        SELECT id, username, total_points,
+        RANK() OVER (ORDER BY total_points DESC) as rank
+        FROM users
+    ");
+        $leaderboard = $query->getResultArray();
+
+        $rank = null;
+        foreach ($leaderboard as $entry) {
+            if ($entry['id'] == $user['id']) {
+                $rank = $entry['rank'];
+                break;
+            }
+        }
 
         return view('profile', [
             'user' => $user,
             'followers' => $followers,
             'following' => $following,
-            'accuracy' => $accuracy
+            'accuracy' => $accuracy,
+            'rank' => $rank
         ]);
     }
+
 }

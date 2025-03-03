@@ -20,7 +20,8 @@ class UserModel extends Model
         'time_spent',
         'followers',
         'following',
-        'bio'
+        'bio',
+        'is_admin'
     ];
 
     protected $useTimestamps = false;
@@ -30,9 +31,16 @@ class UserModel extends Model
         return $this->where('id', $id)->first();
     }
 
-    // ✅ NEW: Fetch user by username
     public function getUserByUsername($username)
     {
         return $this->where('username', $username)->first();
     }
+
+    public function getUserByEmail($email)
+    {
+        return $this->select('id, username, email, avatar, is_admin, password') // ✅ Ensure is_admin is selected
+        ->where('email', $email)
+            ->first();
+    }
+
 }
