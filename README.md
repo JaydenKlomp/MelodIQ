@@ -1,94 +1,114 @@
-# 🎵 MelodIQ - Music Trivia Game 🎵
+# 🎵 MelodIQ - Music Trivia Game
 
-MelodIQ is an interactive **music trivia game** where players test their music knowledge, earn points, and compete on leaderboards. Built using **CodeIgniter 4, Bootstrap, JavaScript, and AJAX**, this game provides a fun and engaging solo experience with trivia challenges created by admins.
+![PHP](https://img.shields.io/badge/PHP-8.1-blue) ![CodeIgniter](https://img.shields.io/badge/CodeIgniter-4.3-red) ![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-purple)
+
+Welcome to **MelodIQ**, a fun and engaging music trivia game! Test your music knowledge, compete with others, and climb the leaderboard. Whether you're a casual listener or a hardcore music fan, there's something for everyone!
+
+---
+
+## 📜 License
+This project is licensed under the **GNU General Public License v2.0 (GPL-2.0)**. You are free to modify and distribute the project under the same license.
+
+For more details, see the [LICENSE](LICENSE) file.
 
 ---
 
 ## 🚀 Features
-
-### 🎮 **For Players:**
-- 🎵 Play music trivia games with **multiple-choice** questions
-- 🏆 Earn points based on correct answers
-- ⏳ Timer-based trivia for an extra challenge
-- 📊 Track stats: **trivias played, total score, accuracy, and time spent**
-- 🎭 User **profile with avatar and achievements**
-- 🏅 **Leaderboard** to compete with other players
-
-### 🛠 **For Admins:**
-- ✏️ **Create, edit, delete** trivia quizzes
-- 🎶 **Attach audio clips** to trivia questions
-- 📊 Track **trivia stats and player performances**
-- 🔗 Share trivia games via unique links
-
-### 🔥 **Additional Features:**
-- 🎨 Fully responsive UI (Bootstrap)
-- 🌇 Dark/Light mode
-- 📢 Social media sharing
-- 🎿 Optional background music & sound effects
+- 🎮 **Play Trivia** - Choose from different categories and difficulties.
+- 📝 **Create Trivia** - Admins can create and edit trivia quizzes.
+- 📊 **Leaderboard** - Compete with other players and see the rankings.
+- 📈 **Player Stats** - Track your total points, games played, and answer accuracy.
+- 👥 **Followers System** - Follow and connect with other players.
+- 🔊 **Media Questions** - Includes **audio & video** questions.
 
 ---
 
-## 🏗️ Tech Stack
+## 🛠️ Installation & Setup
+### 1️⃣ Prerequisites
+- PHP 8+
+- MySQL/MariaDB
+- Apache/Nginx
+- Composer (for dependencies)
 
-| **Technology**  | **Usage** |
-|----------------|------------------|
-| **CodeIgniter 4** | PHP Framework (Backend) |
-| **Bootstrap** | Responsive UI & Styling |
-| **JavaScript & AJAX** | Dynamic Trivia Gameplay |
-| **MySQL** | Database for Users & Trivia |
-| **jQuery** | Interactive UI Elements |
-| **FontAwesome** | Icons & UI Enhancements |
-
----
-
-## ⚙️ Installation & Setup
-
-### 1️⃣ Clone the Repository
+### 2️⃣ Clone the Repository
 ```sh
-git clone https://github.com/jaydenklomp/melodiq.git
+git clone https://github.com/YOUR_USERNAME/melodiq.git
 cd melodiq
 ```
 
-### 2️⃣ Install Dependencies
-Make sure you have **Composer** installed. Then run:
+### 3️⃣ Install Dependencies
 ```sh
 composer install
 ```
 
-### 3️⃣ Database Setup
-- Create a **MySQL database**
-- Import the SQL file (provided in `/database/melodiq.sql`)
-- Configure `.env` file with your database credentials:
-```ini
+### 4️⃣ Configure the Environment
+Rename `.env.example` to `.env` and update database credentials:
+```sh
+cp .env.example .env
+```
+Update the following lines in `.env`:
+```
 database.default.hostname = localhost
 database.default.database = melodiq
 database.default.username = root
-database.default.password = 
+database.default.password = yourpassword
 database.default.DBDriver = MySQLi
 ```
 
-### 4️⃣ Run the Application
+### 5️⃣ Run Database Migrations
+- Import `codeigniter.sql` into MySQL using PhpMyAdmin or CLI:
+```bash
+mysql -u root -p a3bc < codeigniter.sql
+```
+
+### 6️⃣ Start the Server
 ```sh
 php spark serve
 ```
-- Open in browser: **http://localhost:8080**
+
+The project will be available at: [http://localhost:8080](http://localhost:8080)
 
 ---
 
-## 📌 How to Contribute
-1. **Fork** the repo
-2. **Create a new branch** (`feature-new-trivia`)
-3. **Commit changes** (`git commit -m "Added leaderboard"`)
-4. **Push** the branch (`git push origin feature-new-trivia`)
-5. **Create a Pull Request**
+## 🎮 How to Play
+1. **Register/Login** - Create an account to track your progress.
+2. **Choose a Trivia** - Browse available quizzes and select one.
+3. **Answer Questions** - Choose the correct answers before time runs out.
+4. **Earn Points** - Get points for correct answers.
+5. **Check Leaderboard** - See where you rank among other players!
 
 ---
 
-## 📝 License
-This project is licensed under the **MIT License**.
+## 🎩 Admin Features
+Admins have additional privileges:
+- **Create Trivia** - Add new quizzes with multiple questions.
+- **Edit Trivia** - Modify existing quizzes.
+- **Delete Trivia** - Remove outdated quizzes.
+
+To set a user as an admin, update the `is_admin` field in the database to `1`.
 
 ---
 
-## 🌟 Support & Contact
-For any issues, open an [issue on GitHub](https://github.com/JaydenKlomp/melodiq/issues).  
-Enjoy playing **MelodIQ**! 🎶✨  
+## 🌟 Contributing
+We welcome contributions! Follow these steps:
+1. 🍴 Fork the repository
+2. 🌿 Create a new branch (`git checkout -b feature-name`)
+3. 🛠️ Make your changes
+4. 🚀 Commit and push (`git commit -m "Added new feature" && git push origin feature-name`)
+5. 🔁 Open a Pull Request
+
+---
+
+## 🔧 Troubleshooting
+- **Database connection issues?** Check your `.env` file settings.
+- **Migrations not running?** Ensure your database exists and is correctly configured.
+- **Can't log in?** Check the users table to ensure credentials are correct.
+
+---
+
+👨‍💻 **Developed by [Jayden Klomp](https://github.com/JaydenKlomp)**  
+🔗 **GitHub Repository:** [MelodIQ](https://github.com/JaydenKlomp/melodiq)
+
+
+Enjoy playing **MelodIQ**! 🎶🔥
+
