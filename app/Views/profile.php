@@ -12,7 +12,7 @@ $isFollowing = session()->get('isLoggedIn') ? $followersModel->isFollowing(sessi
             <div class="card profile-card shadow-lg">
                 <div class="card-body text-center">
                     <div class="profile-header">
-                        <img src="<?= base_url($user['avatar'] ?: 'assets/img/default-avatar.png') ?>" class="profile-avatar">
+                        <img src="<?= base_url($user['avatar'] ?: 'uploads/avatars/default.jpg') ?>" class="profile-avatar">
                         <h2 class="mt-3"><?= esc($user['username']) ?></h2>
                         <p class="profile-bio"><?= esc($user['bio'] ?: 'No bio yet.') ?></p>
                     </div>

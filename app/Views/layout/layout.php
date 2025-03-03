@@ -40,7 +40,7 @@
                 <li class="nav-item dropdown">
                     <?php if(session()->get('isLoggedIn')): ?>
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                            <img src="<?= base_url(session()->get('avatar') ?: 'uploads/avatars/default.png') ?>" class="rounded-circle border" width="35" height="35">
+                            <img src="<?= base_url(session()->get('avatar') ?: 'uploads/avatars/default.jpg') ?>" class="rounded-circle border" width="35" height="35">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             <li><a class="dropdown-item" href="<?= base_url('profile') ?>">Profile</a></li>

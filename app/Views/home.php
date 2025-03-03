@@ -77,7 +77,7 @@
                         <td class="rank-col">#<?= $index + 1 ?></td>
                         <td>
                             <a href="<?= base_url('profile/' . $player['username']) ?>" class="player-link">
-                                <img src="<?= base_url($player['avatar'] ?: 'uploads/avatars/default.png') ?>" class="avatar-img">
+                                <img src="<?= base_url($player['avatar'] ?: 'uploads/avatars/default.jpg') ?>" class="avatar-img">
                                 <?= esc($player['username']) ?>
                             </a>
                         </td>
