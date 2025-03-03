@@ -56,9 +56,9 @@ database.default.DBDriver = MySQLi
 ```
 
 ### 5️⃣ Run Database Migrations
-- Import `codeigniter.sql` into MySQL using PhpMyAdmin or CLI:
+- Import `melodiq.sql` into MySQL using PhpMyAdmin or CLI:
 ```bash
-mysql -u root -p a3bc < codeigniter.sql
+mysql -u root -p melodiq < melodiq.sql
 ```
 
 ### 6️⃣ Start the Server
