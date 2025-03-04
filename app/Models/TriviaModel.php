@@ -13,8 +13,8 @@ class TriviaModel extends Model
         'description',
         'category',
         'difficulty',
-        'time_limit',  // ✅ Ensure this exists
-        'public',      // ✅ Ensure this exists
+        'time_limit',
+        'public',
         'created_by',
         'created_at'
     ];

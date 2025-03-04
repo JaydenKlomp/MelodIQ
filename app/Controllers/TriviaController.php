@@ -214,12 +214,11 @@ class TriviaController extends Controller
             return redirect()->to('/trivias')->with('error', 'Trivia not found.');
         }
 
-        // Fetch Questions
+        // Fetch Questions and shuffle answers before passing to the view
         $questions = $db->table('questions')->where('trivia_id', $id)->get()->getResultArray();
         foreach ($questions as &$q) {
             $q['answers'] = $db->table('answers')->where('question_id', $q['id'])->get()->getResultArray();
-
-            shuffle($q['answers']);
+            shuffle($q['answers']); // Shuffle answer options while keeping ID & correctness integrity
         }
 
         return view('trivia/play', [
@@ -227,6 +226,7 @@ class TriviaController extends Controller
             'questions' => $questions
         ]);
     }
+
 
     public function submit($id)
     {
@@ -237,10 +237,10 @@ class TriviaController extends Controller
             return redirect()->to('/login')->with('error', 'You need to be logged in to play.');
         }
 
-        // ✅ Fetch only the correct answers for this trivia
+        // ✅ Fetch correct answers for this trivia
         $correctAnswers = [];
         $query = $db->table('answers')
-            ->select('question_id, id')
+            ->select('question_id, id, answer_text')
             ->whereIn('question_id', function ($builder) use ($id) {
                 return $builder->select('id')->from('questions')->where('trivia_id', $id);
             })
@@ -249,29 +249,42 @@ class TriviaController extends Controller
             ->getResultArray();
 
         foreach ($query as $ans) {
-            $correctAnswers[$ans['question_id']] = $ans['id'];
+            $correctAnswers[$ans['question_id']] = [
+                'id' => $ans['id'],
+                'answer_text' => $ans['answer_text']
+            ];
         }
 
-        // ✅ Calculate score & track correct/incorrect answers
+        // ✅ Store user answers
         $userAnswers = $this->request->getPost('answers');
         $score = 0;
         $correctCount = 0;
         $incorrectCount = 0;
         $totalQuestions = count($correctAnswers);
+        $savedAnswers = [];
 
         foreach ($userAnswers as $questionId => $answerId) {
-            if (isset($correctAnswers[$questionId]) && $correctAnswers[$questionId] == $answerId) {
+            $isCorrect = isset($correctAnswers[$questionId]) && $correctAnswers[$questionId]['id'] == $answerId;
+            if ($isCorrect) {
                 $score += 10;
                 $correctCount++;
             } else {
                 $incorrectCount++;
             }
+
+            // Save user answers for later display
+            $savedAnswers[$questionId] = [
+                'question_id' => $questionId,
+                'user_answer_id' => $answerId,
+                'correct_answer_id' => $correctAnswers[$questionId]['id'] ?? null,
+                'correct_answer_text' => $correctAnswers[$questionId]['answer_text'] ?? 'Unknown'
+            ];
         }
 
-        // ✅ Calculate answer accuracy properly
-        $accuracy = ($totalQuestions > 0) ? round(($correctCount / $totalQuestions) * 100, 2) : 0;
+        // ✅ Store answers in session for retrieval on results page
+        session()->set('user_answers', $savedAnswers);
 
-        // ✅ Get time spent from the frontend form
+        // ✅ Get time spent from frontend form
         $timeSpent = (int) $this->request->getPost('time_spent');
 
         // ✅ Save progress for this trivia attempt
@@ -283,7 +296,7 @@ class TriviaController extends Controller
             'completed_at' => date('Y-m-d H:i:s')
         ]);
 
-        // ✅ Ensure `incorrect_answers` column exists in the `users` table
+        // ✅ Update user statistics
         $db->table('users')->where('id', $userId)->set([
             'total_points' => 'total_points + ' . $score,
             'trivia_played' => 'trivia_played + 1',
@@ -294,7 +307,6 @@ class TriviaController extends Controller
 
         return redirect()->to('/trivia/results/' . $id)->with('success', 'Trivia completed! Check your results.');
     }
-
 
     public function results($id)
     {
@@ -311,7 +323,7 @@ class TriviaController extends Controller
             return redirect()->to('/trivias')->with('error', 'Trivia not found.');
         }
 
-        // Fetch the user's score for this trivia
+        // Fetch user progress
         $userProgress = $db->table('user_trivia_progress')
             ->where(['user_id' => $userId, 'trivia_id' => $id])
             ->orderBy('completed_at', 'DESC')
@@ -322,13 +334,41 @@ class TriviaController extends Controller
             return redirect()->to('/trivias')->with('error', 'No recorded score for this trivia.');
         }
 
+        // Fetch all questions
+        $questions = $db->table('questions')
+            ->where('trivia_id', $id)
+            ->get()
+            ->getResultArray();
+
+        // Retrieve stored answers from session
+        $userAnswers = session()->get('user_answers') ?? [];
+
+        foreach ($questions as &$q) {
+            $q['user_answer_id'] = $userAnswers[$q['id']]['user_answer_id'] ?? null;
+            $q['correct_answer_id'] = $userAnswers[$q['id']]['correct_answer_id'] ?? null;
+            $q['correct_answer_text'] = $userAnswers[$q['id']]['correct_answer_text'] ?? 'Unknown';
+
+            // Fetch user-selected answer text
+            if ($q['user_answer_id']) {
+                $userAnswerText = $db->table('answers')
+                    ->select('answer_text')
+                    ->where('id', $q['user_answer_id'])
+                    ->get()
+                    ->getRowArray();
+
+                $q['user_answer_text'] = $userAnswerText['answer_text'] ?? 'Unknown';
+            } else {
+                $q['user_answer_text'] = 'No Answer';
+            }
+        }
+
         return view('trivia/results', [
             'trivia' => $trivia,
             'score' => $userProgress['score'],
-            'correctCount' => round($userProgress['score'] / 10) // Assuming 10 points per correct answer
+            'correctCount' => round($userProgress['score'] / 10),
+            'timeTaken' => $userProgress['time_taken'],
+            'questions' => $questions
         ]);
     }
-
-
 
 }
