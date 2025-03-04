@@ -6,13 +6,6 @@ Welcome to **MelodIQ**, a fun and engaging music trivia game! Test your music kn
 
 ---
 
-## 📜 License
-This project is licensed under the **GNU General Public License v2.0 (GPL-2.0)**. You are free to modify and distribute the project under the same license.
-
-For more details, see the [LICENSE](LICENSE) file.
-
----
-
 ## 🚀 Features
 - 🎮 **Play Trivia** - Choose from different categories and difficulties.
 - 📝 **Create Trivia** - Admins can create and edit trivia quizzes.
@@ -89,6 +82,12 @@ To set a user as an admin, update the `is_admin` field in the database to `1`.
 
 ---
 
+## 📜 License
+This project is licensed under the **GNU General Public License v2.0 (GPL-2.0)**. You are free to modify and distribute the project under the same license.
+
+For more details, see the [LICENSE](LICENSE) file.
+
+---
 ## 🌟 Contributing
 We welcome contributions! Follow these steps:
 1. 🍴 Fork the repository
