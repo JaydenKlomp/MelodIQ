@@ -73,14 +73,12 @@ class TriviaController extends Controller
             'created_at' => date('Y-m-d H:i:s')
         ];
 
-        // ✅ Insert Trivia and get its ID
         if (!$triviaModel->insert($triviaData)) {
             print_r($triviaModel->errors());
             exit();
         }
         $triviaId = $triviaModel->insertID();
 
-        // ✅ Insert Questions
         $questions = $this->request->getPost('questions') ?? [];
 
         foreach ($questions as $q) {
@@ -94,13 +92,12 @@ class TriviaController extends Controller
             $db->table('questions')->insert($questionData);
             $questionId = $db->insertID();
 
-            // ✅ Insert Answers
             if (!empty($q['answers'])) {
-                foreach ($q['answers'] as $a) {
+                foreach ($q['answers'] as $answerId => $a) {
                     $answerData = [
                         'question_id' => $questionId,
                         'answer_text' => $a['text'],
-                        'is_correct' => isset($a['correct']) ? 1 : 0
+                        'is_correct' => ($answerId == $q['correct']) ? 1 : 0 // ✅ Assigns the correct answer ID properly
                     ];
                     $db->table('answers')->insert($answerData);
                 }
@@ -109,6 +106,7 @@ class TriviaController extends Controller
 
         return redirect()->to('/trivia/edit/' . $triviaId)->with('success', 'Trivia created successfully!');
     }
+
 
     public function edit($id)
     {

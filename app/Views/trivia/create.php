@@ -4,7 +4,7 @@
 <div class="container mt-5">
     <h2 class="text-center fw-bold">Create New Trivia</h2>
 
-    <form action="<?= base_url('trivia/save') ?>" method="POST" class="mt-4" enctype="multipart/form-data">
+    <form id="trivia-form" action="<?= base_url('trivia/save') ?>" method="POST" class="mt-4" enctype="multipart/form-data">
         <!-- Trivia Details -->
         <div class="mb-3">
             <label class="form-label">Trivia Title</label>
@@ -48,10 +48,8 @@
 
         <!-- Questions Section -->
         <h3 class="mt-4">Questions</h3>
-        <div id="questions-container">
-            <!-- Dynamic questions will be inserted here -->
-        </div>
-        <button type="button" class="btn btn-primary mt-3" id="add-question">Add Question</button>
+        <div id="questions-container"></div>
+        <button type="button" class="btn btn-primary mt-3" id="add-question">➕ Add Question</button>
 
         <button type="submit" class="btn btn-warning w-100 mt-4">Create Trivia</button>
     </form>
@@ -61,58 +59,89 @@
     document.addEventListener("DOMContentLoaded", function () {
         let questionCount = 0;
 
-        document.getElementById("add-question").addEventListener("click", function () {
+        function addQuestion() {
             questionCount++;
 
             let questionHTML = `
-            <div class="card mt-3 p-3">
-                <h5>Question ${questionCount}</h5>
-                <div class="mb-3">
-                    <label class="form-label">Question Text</label>
-                    <input type="text" name="questions[${questionCount}][text]" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Video URL (Optional)</label>
-                    <input type="text" name="questions[${questionCount}][video]" class="form-control">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Audio URL (Optional)</label>
-                    <input type="text" name="questions[${questionCount}][audio]" class="form-control">
-                </div>
-
-                <h6>Answers</h6>
-                <div class="answers-container">
-                    <div class="mb-2">
-                        <input type="text" name="questions[${questionCount}][answers][0][text]" class="form-control" placeholder="Answer 1" required>
-                        <input type="checkbox" name="questions[${questionCount}][answers][0][correct]"> Correct?
-                    </div>
-                </div>
-                <button type="button" class="btn btn-sm btn-success add-answer">Add Answer</button>
-                <button type="button" class="btn btn-sm btn-danger remove-question">Remove Question</button>
+        <div class="card mt-3 p-3 question-card" data-question="${questionCount}">
+            <h5>Question ${questionCount}</h5>
+            <div class="mb-3">
+                <label class="form-label">Question Text</label>
+                <input type="text" name="questions[${questionCount}][text]" class="form-control" required>
             </div>
-        `;
+            <div class="mb-3">
+                <label class="form-label">Video URL (Optional)</label>
+                <input type="text" name="questions[${questionCount}][video]" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Audio URL (Optional)</label>
+                <input type="text" name="questions[${questionCount}][audio]" class="form-control">
+            </div>
+
+            <h6>Answers</h6>
+            <div class="answers-container">
+                ${generateAnswerHTML(questionCount, 1)}
+                ${generateAnswerHTML(questionCount, 2)}
+            </div>
+            <button type="button" class="btn btn-sm btn-success add-answer">➕ Add Answer</button>
+            <button type="button" class="btn btn-sm btn-danger remove-question">🗑 Remove Question</button>
+
+            <!-- Hidden field to store the correct answer ID -->
+            <input type="hidden" name="questions[${questionCount}][correct]" class="correct-answer-hidden">
+        </div>`;
 
             document.getElementById("questions-container").insertAdjacentHTML("beforeend", questionHTML);
-        });
+        }
+
+        function generateAnswerHTML(questionIndex, answerId) {
+            return `
+        <div class="answer-group mb-2">
+            <div class="input-group">
+                <input type="text" name="questions[${questionIndex}][answers][${answerId}][text]" class="form-control" placeholder="Answer ${answerId}" required>
+                <div class="input-group-text">
+                    <input type="radio" name="questions[${questionIndex}][correct]" value="${answerId}" required> Correct?
+                </div>
+                <button type="button" class="btn btn-danger btn-sm remove-answer">❌</button>
+            </div>
+        </div>`;
+        }
+
+        document.getElementById("add-question").addEventListener("click", addQuestion);
 
         document.addEventListener("click", function (e) {
             if (e.target.classList.contains("add-answer")) {
-                let answerCount = e.target.previousElementSibling.childElementCount;
-                let questionIndex = e.target.closest(".card").querySelector("h5").textContent.split(" ")[1];
+                let questionCard = e.target.closest(".question-card");
+                let questionIndex = questionCard.dataset.question;
+                let answerCount = questionCard.querySelectorAll(".answer-group").length + 1;
 
-                let answerHTML = `
-                <div class="mb-2">
-                    <input type="text" name="questions[${questionIndex}][answers][${answerCount}][text]" class="form-control" placeholder="Answer ${answerCount + 1}" required>
-                    <input type="checkbox" name="questions[${questionIndex}][answers][${answerCount}][correct]"> Correct?
-                </div>
-            `;
-                e.target.previousElementSibling.insertAdjacentHTML("beforeend", answerHTML);
+                let newAnswer = generateAnswerHTML(questionIndex, answerCount);
+                questionCard.querySelector(".answers-container").insertAdjacentHTML("beforeend", newAnswer);
+            }
+
+            if (e.target.classList.contains("remove-answer")) {
+                let answerGroup = e.target.closest(".answer-group");
+                if (answerGroup) answerGroup.remove();
             }
 
             if (e.target.classList.contains("remove-question")) {
-                e.target.closest(".card").remove();
+                e.target.closest(".question-card").remove();
+            }
+        });
+
+        document.getElementById("trivia-form").addEventListener("submit", function (e) {
+            let questions = document.querySelectorAll(".question-card");
+            for (let question of questions) {
+                let correctAnswer = question.querySelector('input[type="radio"]:checked');
+
+                if (!correctAnswer) {
+                    alert("Each question must have at least one correct answer.");
+                    e.preventDefault();
+                    return;
+                }
             }
         });
     });
 </script>
+
+
 <?= $this->endSection() ?>

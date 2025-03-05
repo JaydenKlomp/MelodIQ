@@ -38,7 +38,7 @@
                         <?php foreach ($q['answers'] as $a): ?>
                             <div class="mb-2">
                                 <input type="text" name="questions[<?= $q['id'] ?>][answers][<?= $a['id'] ?>][text]" class="form-control" value="<?= esc($a['answer_text']) ?>" required>
-                                <input type="checkbox" name="questions[<?= $q['id'] ?>][answers][<?= $a['id'] ?>][correct]" <?= $a['is_correct'] ? 'checked' : '' ?>> Correct?
+                                <input type="radio" name="questions[<?= $q['id'] ?>][correct]" value="<?= $a['id'] ?>" <?= $a['is_correct'] ? 'checked' : '' ?>> Correct?
                             </div>
                         <?php endforeach; ?>
                     </div>
