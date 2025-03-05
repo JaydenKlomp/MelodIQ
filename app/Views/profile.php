@@ -1,3 +1,8 @@
+<?php /** @var $followers */ ?>
+<?php /** @var $following */ ?>
+<?php /** @var $accuracy */ ?>
+<?php /** @var $rank */ ?>
+<?php /** @var $user */ ?>
 <?= $this->extend('layout/layout') ?>
 
 <?= $this->section('content') ?>

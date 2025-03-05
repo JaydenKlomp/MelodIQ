@@ -1,3 +1,4 @@
+<?php /** @var $topPlayers */ ?>
 <?= $this->extend('layout/layout') ?>
 
 <?= $this->section('content') ?>

@@ -1,3 +1,4 @@
+<?php /** @var $user */ ?>
 <?= $this->extend('layout/layout') ?>
 
 <?= $this->section('content') ?>

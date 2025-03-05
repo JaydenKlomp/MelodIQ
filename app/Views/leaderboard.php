@@ -1,3 +1,5 @@
+<?php /** @var $users */ ?>
+<?php /** @var $sort */ ?>
 <?= $this->extend('layout/layout') ?>
 
 <?= $this->section('content') ?>

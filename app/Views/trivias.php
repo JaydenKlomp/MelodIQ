@@ -1,3 +1,7 @@
+<?php /** @var $completedTrivias */ ?>
+<?php /** @var $category */ ?>
+<?php /** @var $difficulty */ ?>
+<?php /** @var $search */ ?>
 <?= $this->extend('layout/layout') ?>
 
 <?= $this->section('content') ?>

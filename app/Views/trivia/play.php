@@ -1,3 +1,5 @@
+<?php /** @var $trivia */ ?>
+<?php /** @var $questions */ ?>
 <?= $this->extend('layout/layout') ?>
 
 <?= $this->section('content') ?>
