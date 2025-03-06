@@ -1,8 +1,7 @@
-<?php /** @var $trivia */ ?>
-<?php /** @var $questions */ ?>
 <?= $this->extend('layout/layout') ?>
 
 <?= $this->section('content') ?>
+<link rel="stylesheet" href="<?= base_url('css/play.css') ?>">
 <div class="container mt-5">
     <h2 class="text-center fw-bold"><?= esc($trivia['title']) ?></h2>
     <p class="text-muted text-center"><?= esc($trivia['description']) ?></p>
@@ -17,74 +16,11 @@
     </form>
 </div>
 
-<script>
-    let startTime = Date.now();
-    let questions = <?= json_encode($questions) ?>;
-    let currentIndex = 0;
-    let userAnswers = {}; // Store all user answers
+<!-- ✅ Use CDN only, remove the local reference -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 
-    function loadQuestion(index) {
-        if (index >= questions.length) {
-            document.getElementById('next-question').classList.add('d-none');
-            document.getElementById('submit-trivia').classList.remove('d-none');
-            return;
-        }
-
-        let question = questions[index];
-        let answersHtml = '';
-
-        question.answers.sort(() => Math.random() - 0.5); // Shuffle answers
-
-        question.answers.forEach(answer => {
-            let isChecked = userAnswers[question.id] === answer.id ? 'checked' : '';
-            answersHtml += `
-                <div class="form-check">
-                    <input type="radio" name="question_${question.id}" value="${answer.id}" class="form-check-input" ${isChecked} required>
-                    <label class="form-check-label">${answer.answer_text}</label>
-                </div>
-            `;
-        });
-
-        document.getElementById('question-container').innerHTML = `
-            <div class="card mt-3 p-3">
-                <h5>${index + 1}. ${question.question_text}</h5>
-                ${question.video_url ? `<video width="100%" controls><source src="${question.video_url}" type="video/mp4"></video>` : ''}
-                ${question.audio_url ? `<audio controls><source src="${question.audio_url}" type="audio/mpeg"></audio>` : ''}
-                ${answersHtml}
-            </div>
-        `;
-    }
-
-    document.getElementById('next-question').addEventListener('click', function () {
-        let selectedAnswer = document.querySelector(`input[name="question_${questions[currentIndex].id}"]:checked`);
-        if (!selectedAnswer) {
-            alert("Please select an answer before proceeding.");
-            return;
-        }
-
-        // Store selected answer
-        userAnswers[questions[currentIndex].id] = selectedAnswer.value;
-
-        // Move to next question
-        currentIndex++;
-        loadQuestion(currentIndex);
-    });
-
-    document.getElementById("trivia-form").addEventListener("submit", function () {
-        let endTime = Date.now();
-        document.getElementById("time_spent").value = Math.floor((endTime - startTime) / 1000);
-
-        // Append all answers to form before submitting
-        for (let questionId in userAnswers) {
-            let input = document.createElement("input");
-            input.type = "hidden";
-            input.name = `answers[${questionId}]`;
-            input.value = userAnswers[questionId];
-            this.appendChild(input);
-        }
-    });
-
-    document.addEventListener('DOMContentLoaded', () => loadQuestion(currentIndex));
-</script>
+<script id="question-data" type="application/json"><?= json_encode($questions) ?></script>
+<script src="<?= base_url('js/trivia.js') ?>"></script> <!-- Keep this for Trivia Logic -->
 
 <?= $this->endSection() ?>

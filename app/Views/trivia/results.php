@@ -1,24 +1,21 @@
-<?php /** @var $trivia */ ?>
-<?php /** @var $score */ ?>
-<?php /** @var $correctCount */ ?>
-<?php /** @var $timeTaken */ ?>
-<?php /** @var $questions */ ?>
-
 <?= $this->extend('layout/layout') ?>
 
 <?= $this->section('content') ?>
+<link rel="stylesheet" href="<?= base_url('css/results.css') ?>">
 <div class="container mt-5 text-center">
-    <h2 class="fw-bold">Trivia Completed!</h2>
-    <p class="lead">Your score for <strong><?=
-            esc($trivia['title']) ?></strong></p>
-    <h3 class="text-success"><?= esc($score) ?> Points</h3>
-    <p>Correct Answers: <strong><?= esc($correctCount) ?></strong></p>
-    <p>Time Taken: <strong><?= esc($timeTaken) ?> seconds</strong></p>
+    <h2 class="fw-bold">🎉 Trivia Completed!</h2>
+    <p class="lead">Your score for <strong><?= esc($trivia['title']) ?></strong></p>
+
+    <!-- Score Counter Animation -->
+    <h3 id="score-counter" class="text-success" data-score="<?= esc($score) ?>">0</h3>
+
+    <p>✅ Correct Answers: <strong><?= esc($correctCount) ?></strong></p>
+    <p>⏳ Time Taken: <strong><?= esc($timeTaken) ?> seconds</strong></p>
 
     <h4 class="mt-4">📋 Question Overview</h4>
     <div class="mt-3">
         <?php foreach ($questions as $q): ?>
-            <div class="card mt-3 p-3 <?= ($q['user_answer_id'] == $q['correct_answer_id']) ? 'border-success' : 'border-danger' ?>">
+            <div class="card mt-3 p-3 question-card <?= ($q['user_answer_id'] == $q['correct_answer_id']) ? 'border-success' : 'border-danger' ?>">
                 <h5><?= esc($q['question_text']) ?></h5>
 
                 <?php if (!empty($q['video_url'])): ?>
@@ -49,4 +46,10 @@
 
     <a href="<?= base_url('trivias') ?>" class="btn btn-primary mt-4">🔙 Back to Trivias</a>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script src="<?= base_url('js/triviaresults.js') ?>"></script>
+
+
 <?= $this->endSection() ?>

@@ -80,8 +80,8 @@
 
             <h6>Answers</h6>
             <div class="answers-container">
+                ${generateAnswerHTML(questionCount, 0)}
                 ${generateAnswerHTML(questionCount, 1)}
-                ${generateAnswerHTML(questionCount, 2)}
             </div>
             <button type="button" class="btn btn-sm btn-success add-answer">➕ Add Answer</button>
             <button type="button" class="btn btn-sm btn-danger remove-question">🗑 Remove Question</button>
@@ -93,13 +93,13 @@
             document.getElementById("questions-container").insertAdjacentHTML("beforeend", questionHTML);
         }
 
-        function generateAnswerHTML(questionIndex, answerId) {
+        function generateAnswerHTML(questionIndex, answerIndex) {
             return `
         <div class="answer-group mb-2">
             <div class="input-group">
-                <input type="text" name="questions[${questionIndex}][answers][${answerId}][text]" class="form-control" placeholder="Answer ${answerId}" required>
+                <input type="text" name="questions[${questionIndex}][answers][${answerIndex}][text]" class="form-control" placeholder="Answer ${answerIndex + 1}" required>
                 <div class="input-group-text">
-                    <input type="radio" name="questions[${questionIndex}][correct]" value="${answerId}" required> Correct?
+                    <input type="radio" name="questions[${questionIndex}][correct]" value="${answerIndex}" required> Correct?
                 </div>
                 <button type="button" class="btn btn-danger btn-sm remove-answer">❌</button>
             </div>
@@ -112,7 +112,7 @@
             if (e.target.classList.contains("add-answer")) {
                 let questionCard = e.target.closest(".question-card");
                 let questionIndex = questionCard.dataset.question;
-                let answerCount = questionCard.querySelectorAll(".answer-group").length + 1;
+                let answerCount = questionCard.querySelectorAll(".answer-group").length;
 
                 let newAnswer = generateAnswerHTML(questionIndex, answerCount);
                 questionCard.querySelector(".answers-container").insertAdjacentHTML("beforeend", newAnswer);
@@ -138,10 +138,12 @@
                     e.preventDefault();
                     return;
                 }
+
+                let correctInputField = question.querySelector(".correct-answer-hidden");
+                correctInputField.value = correctAnswer.value;
             }
         });
     });
 </script>
-
 
 <?= $this->endSection() ?>

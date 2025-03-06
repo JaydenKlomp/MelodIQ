@@ -2,6 +2,8 @@
 <?= $this->extend('layout/layout') ?>
 
 <?= $this->section('content') ?>
+<link rel="stylesheet" href="<?= base_url('css/home.css') ?>">
+
 <div class="container mt-5">
 
     <!-- Hero Section -->
@@ -17,15 +19,15 @@
             <h3>Your Progress</h3>
             <div class="row mt-4">
                 <div class="col-md-4">
-                    <h4><?= esc($userStats['trivia_played'] ?? 0) ?></h4>
+                    <h4 class="animated-stat"><?= esc($userStats['trivia_played'] ?? 0) ?></h4>
                     <p>Trivias Played</p>
                 </div>
                 <div class="col-md-4">
-                    <h4><?= esc($userStats['total_points'] ?? 0) ?></h4>
+                    <h4 class="animated-stat"><?= esc($userStats['total_points'] ?? 0) ?></h4>
                     <p>Total Points</p>
                 </div>
                 <div class="col-md-4">
-                    <h4><?= esc($userStats['correct_answers'] ?? 0) ?></h4>
+                    <h4 class="animated-stat"><?= esc($userStats['correct_answers'] ?? 0) ?></h4>
                     <p>Correct Answers</p>
                 </div>
             </div>
@@ -61,33 +63,26 @@
     </div>
 
     <!-- Leaderboard Section -->
-    <div class="leaderboard mt-5 p-4">
+    <div class="leaderboard-container mt-5 p-4 text-center">
         <h3 class="text-center">🏆 Top Players</h3>
-        <div class="table-responsive">
-            <table class="table leaderboard-table">
-                <thead>
-                <tr>
-                    <th class="rank-col">Rank</th>
-                    <th>Username</th>
-                    <th>🏆 Points</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($topPlayers as $index => $player): ?>
-                    <tr class="<?= ($index == 0) ? 'gold' : (($index == 1) ? 'silver' : (($index == 2) ? 'bronze' : '')) ?>">
-                        <td class="rank-col">#<?= $index + 1 ?></td>
-                        <td>
-                            <a href="<?= base_url('profile/' . $player['username']) ?>" class="player-link">
-                                <img src="<?= base_url($player['avatar'] ?: 'uploads/avatars/default.jpg') ?>" class="avatar-img">
-                                <?= esc($player['username']) ?>
-                            </a>
-                        </td>
-                        <td><strong><?= esc($player['total_points']) ?></strong></td>
-                    </tr>
-                <?php endforeach; ?>
-                </tbody>
-            </table>
+
+        <div class="row mt-4 justify-content-center">
+            <?php foreach ($topPlayers as $index => $player): ?>
+                <div class="col-md-4">
+                    <div class="leaderboard-card <?= ($index == 0) ? 'gold' : (($index == 1) ? 'silver' : (($index == 2) ? 'bronze' : '')) ?>">
+                        <div class="leaderboard-rank">#<?= $index + 1 ?></div>
+                        <img src="<?= base_url($player['avatar'] ?: 'uploads/avatars/default.jpg') ?>" class="leaderboard-avatar">
+                        <h5 class="leaderboard-name"><?= esc($player['username']) ?></h5>
+                        <p class="leaderboard-score">🏆 <?= esc($player['total_points']) ?> Points</p>
+                    </div>
+                </div>
+            <?php endforeach; ?>
         </div>
     </div>
+
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script src="<?= base_url('js/home.js') ?>"></script>
+
 <?= $this->endSection() ?>

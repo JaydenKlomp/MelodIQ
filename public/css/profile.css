@@ -1,0 +1,87 @@
+/* 🎨 Background Styling */
+body {
+    background: linear-gradient(-45deg, #1a1a2e, #0f3460, #533483, #16213e);
+    background-size: 400% 400%;
+    animation: gradientMove 10s ease infinite;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* 🌟 Profile Card */
+.profile-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0px 10px 20px rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+.profile-card:hover {
+    transform: scale(1.02);
+}
+
+/* 🖼️ Profile Avatar */
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid #ffc107;
+    transition: transform 0.3s ease-in-out;
+}
+
+.profile-avatar:hover {
+    transform: scale(1.1);
+}
+
+/* 📝 Profile Bio */
+.profile-bio {
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+/* 📊 Profile Stats */
+.profile-stats {
+    display: flex;
+    justify-content: space-around;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #ffc107;
+    text-shadow: 0px 2px 5px rgba(255, 255, 255, 0.3);
+}
+
+/* 🎭 Profile Actions (Buttons) */
+.profile-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.btn-action {
+    font-size: 1rem;
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 50px;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-action:hover {
+    transform: scale(1.05);
+}

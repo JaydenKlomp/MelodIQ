@@ -81,7 +81,7 @@ class TriviaController extends Controller
 
         $questions = $this->request->getPost('questions') ?? [];
 
-        foreach ($questions as $q) {
+        foreach ($questions as $qIndex => $q) {
             $questionData = [
                 'trivia_id' => $triviaId,
                 'question_text' => $q['text'],
@@ -92,20 +92,29 @@ class TriviaController extends Controller
             $db->table('questions')->insert($questionData);
             $questionId = $db->insertID();
 
+            $correctAnswerId = $q['correct'] ?? null; // Correct answer ID from form
+
             if (!empty($q['answers'])) {
-                foreach ($q['answers'] as $answerId => $a) {
+                foreach ($q['answers'] as $answerIndex => $a) {
                     $answerData = [
                         'question_id' => $questionId,
                         'answer_text' => $a['text'],
-                        'is_correct' => ($answerId == $q['correct']) ? 1 : 0 // ✅ Assigns the correct answer ID properly
+                        'is_correct' => 0 // Set all answers as incorrect initially
                     ];
                     $db->table('answers')->insert($answerData);
+                    $insertedAnswerId = $db->insertID();
+
+                    // If this is the correct answer, update `is_correct` to 1
+                    if ($answerIndex == $correctAnswerId) {
+                        $db->table('answers')->where('id', $insertedAnswerId)->update(['is_correct' => 1]);
+                    }
                 }
             }
         }
 
         return redirect()->to('/trivia/edit/' . $triviaId)->with('success', 'Trivia created successfully!');
     }
+
 
 
     public function edit($id)

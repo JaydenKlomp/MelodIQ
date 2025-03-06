@@ -1,10 +1,10 @@
-<?php /** @var $users */ ?>
-<?php /** @var $sort */ ?>
 <?= $this->extend('layout/layout') ?>
 
 <?= $this->section('content') ?>
-<div class="container mt-5">
-    <h2 class="text-center fw-bold">🏆 Leaderboard</h2>
+<link rel="stylesheet" href="<?= base_url('css/leaderboard.css') ?>">
+
+<div class="container mt-5 leaderboard-container text-center">
+    <h2 class="fw-bold">🏆 Leaderboard</h2>
 
     <!-- Sorting Options -->
     <div class="text-center mt-3">
@@ -31,10 +31,10 @@
         </thead>
         <tbody>
         <?php foreach ($users as $index => $user): ?>
-            <tr>
-                <td><?= $index + 1 ?></td>
+            <tr class="leaderboard-row">
+                <td class="rank-number"><?= $index + 1 ?></td>
                 <td>
-                    <img src="<?= base_url($user['avatar'] ?: 'assets/img/default-avatar.png') ?>" class="rounded-circle" width="35" height="35">
+                    <img src="<?= base_url($user['avatar'] ?: 'assets/img/default-avatar.png') ?>" class="rounded-circle avatar-img">
                     <a href="<?= base_url('profile/' . $user['username']) ?>" class="fw-bold"><?= esc($user['username']) ?></a>
                 </td>
                 <td><?= esc($user['total_points']) ?></td>
@@ -61,5 +61,7 @@
         window.location.href = "<?= base_url('leaderboard') ?>?sort=" + sortOption;
     }
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script src="<?= base_url('js/leaderboard.js') ?>"></script>
 
 <?= $this->endSection() ?>

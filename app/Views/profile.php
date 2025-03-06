@@ -1,11 +1,8 @@
-<?php /** @var $followers */ ?>
-<?php /** @var $following */ ?>
-<?php /** @var $accuracy */ ?>
-<?php /** @var $rank */ ?>
-<?php /** @var $user */ ?>
 <?= $this->extend('layout/layout') ?>
 
 <?= $this->section('content') ?>
+<link rel="stylesheet" href="<?= base_url('css/profile.css') ?>">
+
 <?php
 use App\Models\FollowersModel;
 $followersModel = new FollowersModel();
@@ -25,30 +22,30 @@ $isFollowing = session()->get('isLoggedIn') ? $followersModel->isFollowing(sessi
                     <!-- User Stats -->
                     <div class="profile-stats">
                         <div class="stat-item">
-                            <h5><?= esc($user['trivia_played']) ?></h5>
+                            <h5 class="stat-number"><?= esc($user['trivia_played']) ?></h5>
                             <p>Games Played</p>
                         </div>
                         <div class="stat-item">
-                            <h5><?= esc($followers) ?></h5>
+                            <h5 class="stat-number"><?= esc($followers) ?></h5>
                             <p>Followers</p>
                         </div>
                         <div class="stat-item">
-                            <h5><?= esc($following) ?></h5>
+                            <h5 class="stat-number"><?= esc($following) ?></h5>
                             <p>Following</p>
                         </div>
                     </div>
 
                     <div class="profile-stats">
                         <div class="stat-item">
-                            <h5><?= esc($user['total_points']) ?></h5>
+                            <h5 class="stat-number"><?= esc($user['total_points']) ?></h5>
                             <p>Total Points</p>
                         </div>
                         <div class="stat-item">
-                            <h5><?= esc($accuracy) ?>%</h5>
+                            <h5 class="stat-number"><?= esc($accuracy) ?>%</h5>
                             <p>Answer Accuracy</p>
                         </div>
                         <div class="stat-item">
-                            <h5>#<?= esc($rank) ?></h5>
+                            <h5 class="stat-number">#<?= esc($rank) ?></h5>
                             <p>Leaderboard Rank</p>
                         </div>
                     </div>
@@ -72,5 +69,8 @@ $isFollowing = session()->get('isLoggedIn') ? $followersModel->isFollowing(sessi
         </div>
     </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script src="<?= base_url('js/profile.js') ?>"></script>
 
 <?= $this->endSection() ?>
