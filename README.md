@@ -25,7 +25,7 @@ Welcome to **MelodIQ**, a fun and engaging music trivia game! Test your music kn
 
 ### 2️⃣ Clone the Repository
 ```sh
-git clone https://github.com/YOUR_USERNAME/melodiq.git
+git clone https://github.com/JaydenKlomp/melodiq.git
 cd melodiq
 ```
 
