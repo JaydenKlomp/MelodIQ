@@ -1,5 +1,4 @@
 <?= $this->extend('layout/layout') ?>
-
 <?= $this->section('content') ?>
 <link rel="stylesheet" href="<?= base_url('css/trivias.css') ?>">
 
