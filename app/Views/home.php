@@ -65,7 +65,6 @@
     <!-- Leaderboard Section -->
     <div class="leaderboard-container mt-5 p-4 text-center">
         <h3 class="text-center">🏆 Top Players</h3>
-
         <div class="row mt-4 justify-content-center">
             <?php foreach ($topPlayers as $index => $player): ?>
                 <div class="col-md-4">
