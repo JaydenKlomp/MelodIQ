@@ -56,7 +56,6 @@
                             <h5 class="card-title"><?= esc($trivia['title']) ?></h5>
                             <p class="card-text"><?= esc($trivia['description']) ?></p>
                             <span class="badge difficulty-badge"><?= esc($trivia['difficulty']) ?></span>
-
                             <div class="mt-3">
                                 <?php if ($hasCompleted): ?>
                                     <button class="btn btn-sm btn-secondary completed-badge" disabled>✅ Completed</button>
